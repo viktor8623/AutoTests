@@ -4,8 +4,8 @@
 class Certificate:
 
     def __init__(self, type, activity=None, first_tickets_type=None, second_tickets_type=None, third_tickets_type=None,
-                 initial_amount=None, remain_amount=None, name_first_tickets_type="Adult",
-                 name_second_tickets_type="Child", name_third_tickets_type="Senior",
+                 initial_amount=None, remain_amount=None, name_first_tickets_type=None,
+                 name_second_tickets_type=None, name_third_tickets_type=None,
                  first_name="Automated test", last_name="By Viktor", email="test123@email.com"):
         self.type = type
         self.first_name = first_name

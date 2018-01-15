@@ -38,10 +38,9 @@ class CertificateHelper:
         if cert.third_tickets_type is not None:
             driver.find_element_by_xpath("//div[@ng-if='vm.selectedType.key===3']/div[3]//input").send_keys(cert.third_tickets_type)
         # select tickets types
-
-        # initial_amount = driver.find_element_by_id("initialamount").get_attribute("value")
-        # assert initial_amount == str("%g" % float(cert.initial_amount))
-        # removing trailing zeros from a decimal part and comparing with expected results
+        initial_amount = driver.find_element_by_id("initialamount").get_attribute("value")
+        assert initial_amount == "%g" % float(cert.initial_amount), "Wrong value in the Initial Amount field!"
+        # removing trailing zeros from a decimal part and comparing with expected result
 
     def charge_and_save(self, charge_type):   # only cash, check, card
         driver = self.app.driver
@@ -82,12 +81,24 @@ class CertificateHelper:
         ticket_types = driver.find_element_by_xpath("//tbody/tr[1]/td[8]").text
         quantity = driver.find_element_by_xpath("//tbody/tr[1]/td[9]").text
         # finds the text of the elements on the first row of the table on the certificate page
-        assert name == cert.first_name + " " + cert.last_name
-        assert email == cert.email
-        assert initial_amount == "$" + cert.initial_amount
-        assert remain_amount == "$" + cert.initial_amount
-        assert purchase_date == purchase_datetime
-        assert activity == cert.activity
-        assert ticket_types == "Child"
-        assert quantity == "1"
-        # compare expected result with actual reuslt (data in the first row on the table)
+        assert name == cert.first_name + " " + cert.last_name, "Wrong name in the table!"
+        assert email == cert.email, "Wrong email in the table!"
+        assert initial_amount == "$" + cert.initial_amount, "Wrong initial amount in the table!"
+        assert remain_amount == "$" + cert.initial_amount, "Wrong remain amount in the table!"
+        assert purchase_date == purchase_datetime, "Wrong purchase date in the table!"
+        assert activity == cert.activity, "Wrong activity in the table!"
+        # compare expected result with actual result (data in the first row on the table)
+        if cert.name_first_tickets_type is not None:
+            assert cert.name_first_tickets_type in ticket_types, "The first tickets type is not in the table!"
+        if cert.name_second_tickets_type is not None:
+            assert cert.name_second_tickets_type in ticket_types, "The first tickets type is not in the table!"
+        if cert.name_third_tickets_type is not None:
+            assert cert.name_third_tickets_type in ticket_types, "The first tickets type is not in the table!"
+        # check for Tickets type field
+        if cert.first_tickets_type is not None:
+            assert cert.first_tickets_type in quantity, "Wrong amount of first tickets in the table!"
+        if cert.second_tickets_type is not None:
+            assert cert.second_tickets_type in quantity, "Wrong amount of second tickets in the table!"
+        if cert.third_tickets_type is not None:
+            assert cert.third_tickets_type in quantity, "Wrong amount of third tickets in the table!"
+        # check for Quantity field

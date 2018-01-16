@@ -12,15 +12,18 @@ class CertificateHelper:
 
     def navigate_to(self):
         driver = self.app.driver
+        driver.implicitly_wait(0.2)
         if driver.current_url != "https://nfbooking.com/giftcertificate.aspx":
             driver.find_element_by_css_selector(".dropdown").click()
             driver.find_element_by_css_selector("[href = 'giftcertificate.aspx']").click()
-        # elif driver.find_element_by_css_selector(".modal-content") is True:
-        #     driver.find_element_by_css_selector(".dropdown").click()
-        #     driver.find_element_by_css_selector("[href = 'giftcertificate.aspx']").click()
-        # else:
-        #     pass
-
+        elif len(driver.find_elements_by_css_selector(".modal-content")) > 0:
+            cancel_button = driver.find_element_by_xpath("//button[contains(.,'Cancel')]")
+            cancel_button.click()
+            wait = WebDriverWait(driver, 10)
+            wait.until(EC.staleness_of(cancel_button))
+        else:
+            pass
+        driver.implicitly_wait(15)
 
     def select_certificate(self, cert):
         driver = self.app.driver

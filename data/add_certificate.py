@@ -36,12 +36,12 @@ testdata = [
     Certificate(type="Activity Tickets", activity="AlertTest", first_tickets_type="5", second_tickets_type="10",
                 third_tickets_type=None, initial_amount="1000.00", remain_amount=None,
                 name_first_tickets_type="Adult", name_second_tickets_type="Child", name_third_tickets_type=None,
-                first_name="J", last_name="Obrian", email="test123@email.com", id_testdata="GoDo-30"),
+                first_name="J", last_name="O'brian", email="test123@email.com", id_testdata="GoDo-30"),
     # GoDo-30 Purchasing certificate with number of tickets (1000$, cash)
 
     Certificate(type="Activity Tickets", activity="Beyond Good and Evil Tours", first_tickets_type="10",
                 second_tickets_type="10", third_tickets_type=None, initial_amount="500.00", remain_amount=None,
                 name_first_tickets_type="Adult", name_second_tickets_type="Child", name_third_tickets_type=None,
-                first_name="de Medici", last_name="J", email="test123@email.com", id_testdata="GoDo-47"),
+                first_name="de' Medici", last_name="J", email="test123@email.com", id_testdata="GoDo-47"),
     # GoDo-47 Customer-Facing - Purchasing certificate with number of tickets
 ]

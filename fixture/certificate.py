@@ -15,6 +15,11 @@ class CertificateHelper:
         if driver.current_url != "https://nfbooking.com/giftcertificate.aspx":
             driver.find_element_by_css_selector(".dropdown").click()
             driver.find_element_by_css_selector("[href = 'giftcertificate.aspx']").click()
+        # elif driver.find_element_by_css_selector(".modal-content") is True:
+        #     driver.find_element_by_css_selector(".dropdown").click()
+        #     driver.find_element_by_css_selector("[href = 'giftcertificate.aspx']").click()
+        # else:
+        #     pass
 
 
     def select_certificate(self, cert):
@@ -27,6 +32,9 @@ class CertificateHelper:
         driver.find_element_by_css_selector("#firstname").send_keys(cert.first_name)
         driver.find_element_by_css_selector("#lastname").send_keys(cert.last_name)
         driver.find_element_by_css_selector("#email").send_keys(cert.email)
+        if cert.type == "Specific Dollar Amount" and cert.initial_amount is not None:
+            driver.find_element_by_id("initialamount").clear()
+            driver.find_element_by_id("initialamount").send_keys(cert.initial_amount)
         if cert.activity is not None:
             activity_list = driver.find_element_by_css_selector("#activity")
             Select(activity_list).select_by_visible_text(cert.activity)
@@ -38,8 +46,9 @@ class CertificateHelper:
         if cert.third_tickets_type is not None:
             driver.find_element_by_xpath("//div[@ng-if='vm.selectedType.key===3']/div[3]//input").send_keys(cert.third_tickets_type)
         # select tickets types
-        initial_amount = driver.find_element_by_id("initialamount").get_attribute("value")
-        assert initial_amount == "%g" % float(cert.initial_amount), "Wrong value in the Initial Amount field!"
+        if cert.type == "Activity Tickets":
+            initial_amount = driver.find_element_by_id("initialamount").get_attribute("value")
+            assert initial_amount == "%g" % float(cert.initial_amount), "Wrong value in the Initial Amount field!"
         # removing trailing zeros from a decimal part and comparing with expected result
 
     def charge_and_save(self, charge_type):   # only cash, check, card
@@ -83,10 +92,11 @@ class CertificateHelper:
         # finds the text of the elements on the first row of the table on the certificate page
         assert name == cert.first_name + " " + cert.last_name, "Wrong name in the table!"
         assert email == cert.email, "Wrong email in the table!"
-        assert initial_amount == "$" + cert.initial_amount, "Wrong initial amount in the table!"
-        assert remain_amount == "$" + cert.initial_amount, "Wrong remain amount in the table!"
+        assert initial_amount == "$" + "{0:,.2f}".format(float(cert.initial_amount)), "Wrong initial amount in the table!"
+        assert remain_amount == "$" + "{0:,.2f}".format(float(cert.initial_amount)), "Wrong remain amount in the table!"
         assert purchase_date == purchase_datetime, "Wrong purchase date in the table!"
-        assert activity == cert.activity, "Wrong activity in the table!"
+        if cert.type != "Specific Dollar Amount":
+            assert activity == cert.activity, "Wrong activity in the table!"
         # compare expected result with actual result (data in the first row on the table)
         if cert.name_first_tickets_type is not None:
             assert cert.name_first_tickets_type in ticket_types, "The first tickets type is not in the table!"

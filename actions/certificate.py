@@ -6,10 +6,11 @@ import pytz
 
 class CertificateActions:
 
-    def __init__(self, driver):
-        self.driver = driver
-        self.certificate_page = CertificatePage(self.driver)
-        self.navigation_bar = NavigationBar(self.driver)
+    def __init__(self, app):
+        self.app = app
+        self.driver = app.driver
+        self.navigation_bar = NavigationBar(driver=self.driver)
+        self.certificate_page = CertificatePage(driver=self.driver)
         self.purchase_datetime = ""
 
     def add_new_certificate(self, cert):
@@ -27,36 +28,36 @@ class CertificateActions:
         self.certificate_page.click_save_button()
         self.get_purchase_datetime()
 
-    def check_if_it_created(self, cert):
-        assert self.certificate_page.first_row_name == cert.first_name + " " + cert.last_name, \
+    def verify_created_certificate(self, cert):
+        assert self.certificate_page.first_row_name.text == cert.first_name + " " + cert.last_name, \
             "Wrong name in the table!"
-        assert self.certificate_page.first_row_email == cert.email, "Wrong email in the table!"
-        assert self.certificate_page.first_row_initial_amount == "$" + "{0:,.2f}".\
+        assert self.certificate_page.first_row_email.text == cert.email, "Wrong email in the table!"
+        assert self.certificate_page.first_row_initial_amount.text == "$" + "{0:,.2f}".\
             format(float(cert.initial_amount)), "Wrong initial amount in the table!"
-        assert self.certificate_page.first_row_remain_amount == "$" + "{0:,.2f}".format(float(cert.initial_amount)),\
+        assert self.certificate_page.first_row_remain_amount.text == "$" + "{0:,.2f}".format(float(cert.initial_amount)),\
             "Wrong remain amount in the table!"
-        assert self.certificate_page.first_row_purchase_date == self.purchase_datetime,\
+        assert self.certificate_page.first_row_purchase_date.text == self.purchase_datetime,\
             "Wrong purchase date in the table!"
         if cert.certificate_type != "Specific Dollar Amount":
-            assert self.certificate_page.first_row_activity == cert.activity, "Wrong activity in the table!"
+            assert self.certificate_page.first_row_activity.text == cert.activity, "Wrong activity in the table!"
         if cert.name_first_tickets_type is not None:
-            assert cert.name_first_tickets_type in self.certificate_page.first_row_ticket_types,\
+            assert cert.name_first_tickets_type in self.certificate_page.first_row_ticket_types.text,\
                 "The first tickets type is not in the table!"
         if cert.name_second_tickets_type is not None:
-            assert cert.name_second_tickets_type in self.certificate_page.first_row_ticket_types, \
+            assert cert.name_second_tickets_type in self.certificate_page.first_row_ticket_types.text, \
                 "The first tickets type is not in the table!"
         if cert.name_third_tickets_type is not None:
-            assert cert.name_third_tickets_type in self.certificate_page.first_row_ticket_types, \
+            assert cert.name_third_tickets_type in self.certificate_page.first_row_ticket_types.text, \
                 "The first tickets type is not in the table!"
         # check for Tickets type field
         if cert.first_tickets_type is not None:
-            assert cert.first_tickets_type in self.certificate_page.first_row_quantity, \
+            assert cert.first_tickets_type in self.certificate_page.first_row_quantity.text, \
                 "Wrong amount of first tickets in the table!"
         if cert.second_tickets_type is not None:
-            assert cert.second_tickets_type in self.certificate_page.first_row_quantity, \
+            assert cert.second_tickets_type in self.certificate_page.first_row_quantity.text, \
                 "Wrong amount of second tickets in the table!"
         if cert.third_tickets_type is not None:
-            assert cert.third_tickets_type in self.certificate_page.first_row_quantity, \
+            assert cert.third_tickets_type in self.certificate_page.first_row_quantity.text, \
                 "Wrong amount of third tickets in the table!"
         # check for Quantity field
 
@@ -99,12 +100,12 @@ class CertificateActions:
             self.certificate_page.initial_amount_input.send_keys(cert.initial_amount)
 
     def navigate_to(self):
-        self.driver.implicitly_wait(0.2)
-        if self.navigation_bar.current_url() != "https://nfbooking.com/giftcertificate.aspx":
+        # self.driver.implicitly_wait(0.2)
+        if self.app.current_url() != "https://nfbooking.com/giftcertificate.aspx":
             self.navigation_bar.main_actions_drop_down.click()
             self.navigation_bar.sell_gift_certificates.click()
         elif self.certificate_page.certificate_pop_up is True:
             self.certificate_page.click_cancel_button()
         else:
             pass
-        self.driver.implicitly_wait(15)
+        # self.driver.implicitly_wait(15)

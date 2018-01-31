@@ -1,6 +1,7 @@
 from selenium import webdriver
 from app.session import SessionHelper
 from actions.certificate import CertificateActions
+from app.booking import BookingHelper
 
 
 class Application:
@@ -15,14 +16,19 @@ class Application:
         self.driver.maximize_window()
         self.driver.implicitly_wait(15)
         self.session = SessionHelper(self)
-        self.certificate = CertificateActions(self.driver)
+        # self.booking = BookingHelper(self)
+        self.certificate = CertificateActions(self)
+
+
+    def destroy(self):
+        self.driver.quit()
 
     def is_valid(self):
         try:
-            self.driver.current_url
+            self.current_url()
             return True
         except:
             return False
 
-    def destroy(self):
-        self.driver.quit()
+    def current_url(self):
+        return self.driver.current_url

@@ -1,23 +1,35 @@
+from pages.login_page import LoginPage
+from pages.navigation_bar import NavigationBar
+
 
 class SessionHelper:
 
-
     def __init__(self, app):
-        self.app = app
-
-    def open_login_page(self):
-        driver = self.app.driver
-        driver.get("https://nfbooking.com/")
+        self.driver = app.driver
+        self.login_page = LoginPage(driver=self.driver)
+        self.navigation_bar = NavigationBar(driver=self.driver)
 
     def login(self, login, password):
-        driver = self.app.driver
-        self.open_login_page()
-        driver.find_element_by_name("username").send_keys(login)
-        driver.find_element_by_name("password").send_keys(password)
-        driver.find_element_by_css_selector("input[type=submit]").click()
+        self.login_page.open()
+        self.login_page.login_input.send_keys(login)
+        self.login_page.password_input.send_keys(password)
+        self.login_page.login_button.click()
+
+    def ensure_login(self, login, password):
+        if not self.is_logged_in_as_admin():
+            self.login(login, password)
 
     def logout(self):
-        driver = self.app.driver
-        driver.find_element_by_xpath("//a[contains(@class, 'dropdown-toggle waves-effect waves-light top-buttons-link')]").click()
-        driver.find_element_by_xpath("//ul[contains(@class, 'dropdown-menu dropdown-menu-right')]/li[5]/a").click()
+        self.navigation_bar.menu_drop_down.click()
+        self.navigation_bar.logout.click()
 
+    def ensure_logout(self):
+        if self.is_logged_in_as_admin():
+            self.logout()
+
+    def is_logged_in_as_admin(self):
+        return len(self.navigation_bar.navigation_bar) > 0
+
+    def sell_certificate(self):
+        self.navigation_bar.main_actions_drop_down.click()
+        self.navigation_bar.sell_gift_certificates.click()

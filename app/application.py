@@ -1,4 +1,5 @@
 from selenium import webdriver
+import webium.settings
 from app.session import SessionHelper
 from actions.certificate import CertificateActions
 from app.booking import BookingHelper
@@ -15,6 +16,7 @@ class Application:
             raise ValueError("Unrecognized browser %s" % browser)
         self.driver.maximize_window()
         self.driver.implicitly_wait(15)
+        webium.settings.wait_timeout = 5
         self.session = SessionHelper(self)
         # self.booking = BookingHelper(self)
         self.certificate = CertificateActions(self)

@@ -1,7 +1,14 @@
+from time import sleep
+from webium import wait
+from selenium.common.exceptions import InvalidElementStateException
+from selenium.webdriver.support import ui
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from pages.navigation_bar import NavigationBar
 from pages.certificate_page import CertificatePage
 from datetime import datetime
 import pytz
+from webium.wait import wait
 
 
 class CertificateActions:
@@ -22,9 +29,9 @@ class CertificateActions:
         self.certificate_page.email_input.send_keys(cert.email)
         self.enter_initial_amount(cert)
         self.select_activity_and_tickets(cert)
-        self.check_initial_amout(cert)
+        self.check_initial_amount(cert)
         self.certificate_page.select_charge_type(cert.charge_type)
-        self.enter_peyment_information(cert)
+        self.enter_payment_information(cert)
         self.certificate_page.click_save_button()
         self.get_purchase_datetime()
 
@@ -66,8 +73,9 @@ class CertificateActions:
         self.purchase_datetime = self.purchase_datetime.strftime('%m/%d/%Y %I:%M %p CT').lstrip("0").replace(" 0", " ")
         return self.purchase_datetime
 
-    def enter_peyment_information(self, cert):
-        if cert.charge_type == 'Credit Card':
+    def enter_payment_information(self, cert):
+        if cert.charge_type == 'creditcard':
+            sleep(4)
             self.certificate_page.card_number_input.send_keys(cert.card_number)
             self.certificate_page.card_date_input.send_keys(cert.card_date)
             self.certificate_page.card_cvc_input.send_keys(cert.card_cvc)
@@ -77,7 +85,7 @@ class CertificateActions:
         else:
             pass
 
-    def check_initial_amout(self, cert):
+    def check_initial_amount(self, cert):
         if cert.certificate_type == "Activity Tickets":
             initial_amount = self.certificate_page.initial_amount_input.get_attribute("value")
             assert initial_amount == "%g" % float(
@@ -100,12 +108,8 @@ class CertificateActions:
             self.certificate_page.initial_amount_input.send_keys(cert.initial_amount)
 
     def navigate_to(self):
-        # self.driver.implicitly_wait(0.2)
-        if self.app.current_url() != "https://nfbooking.com/giftcertificate.aspx":
+        if self.app.current_url() != "https://dev.godo.io/giftcertificate.aspx":
             self.navigation_bar.main_actions_drop_down.click()
             self.navigation_bar.sell_gift_certificates.click()
-        elif self.certificate_page.certificate_pop_up is True:
+        elif self.certificate_page.certificate_pop_up() is True:
             self.certificate_page.click_cancel_button()
-        else:
-            pass
-        # self.driver.implicitly_wait(15)

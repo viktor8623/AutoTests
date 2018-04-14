@@ -30,12 +30,13 @@ class CertificatePage(BasePage):
     first_tickets_type_input = Find(by=By.XPATH, value="//div[@ng-if='vm.selectedType.key===3']/div[2]//input")
     second_tickets_type_input = Find(by=By.XPATH, value="//div[@ng-if='vm.selectedType.key===3']/div[3]//input")
     third_tickets_type_input = Find(by=By.XPATH, value="//div[@ng-if='vm.selectedType.key===3']/div[3]//input")
+    charge_type_label = Find(by=By.XPATH, value="//label[@for='chargetype']")
     charge_type_list = Find(by=By.CSS_SELECTOR, value="#chargetype")
     check_number_input = Find(by=By.CSS_SELECTOR, value="#charge_checknumbner")
-    card_number_input = Find(by=By.XPATH, value="//input[contains(@class, '__PrivateStripeElement-input')]")
-    card_date_input = Find(by=By.XPATH, value="//input[contains(@class, '__PrivateStripeElement-input')]")
-    card_cvc_input = Find(by=By.XPATH, value="//input[contains(@class, '__PrivateStripeElement-input')]")
-    card_zip_input = Find(by=By.XPATH, value="//input[contains(@class, '__PrivateStripeElement-input')]")
+    card_number_input = Find(by=By.XPATH, value="//input[contains(@class, '__PrivateStripeElement')]")
+    card_date_input = Find(by=By.XPATH, value="//input[contains(@class, '__PrivateStripeElement')]")
+    card_cvc_input = Find(by=By.XPATH, value="//input[contains(@class, '__PrivateStripeElement')]")
+    card_zip_input = Find(by=By.XPATH, value="//input[contains(@class, '__PrivateStripeElement')]")
     save_button = Find(by=By.XPATH, value="//button[contains(.,'Save')]")
     cancel_button = Find(by=By.XPATH, value="//button[contains(.,'Cancel')]")
 
@@ -50,6 +51,7 @@ class CertificatePage(BasePage):
             Select(self.activity_list).select_by_visible_text(activity)
 
     def select_charge_type(self, charge_type):
+        self.charge_type_label.click()
         Select(self.charge_type_list).select_by_visible_text(charge_type)
 
     def click_save_button(self):

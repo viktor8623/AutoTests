@@ -6,7 +6,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from pages.navigation_bar import NavigationBar
 from pages.certificate_page import CertificatePage
-from datetime import datetime
+from datetime import datetime, timedelta
 import pytz
 from webium.wait import wait
 
@@ -18,7 +18,9 @@ class CertificateActions:
         self.driver = app.driver
         self.navigation_bar = NavigationBar(driver=self.driver)
         self.certificate_page = CertificatePage(driver=self.driver)
+        self.now = ""
         self.purchase_datetime = ""
+        self.purchase_datetime_plus_one_minute = ""
 
     def add_new_certificate(self, cert):
         self.navigate_to()
@@ -43,7 +45,8 @@ class CertificateActions:
             format(float(cert.initial_amount)), "Wrong initial amount in the table!"
         assert self.certificate_page.first_row_remain_amount.text == "$" + "{0:,.2f}".format(float(cert.initial_amount)),\
             "Wrong remain amount in the table!"
-        assert self.certificate_page.first_row_purchase_date.text == self.purchase_datetime,\
+        assert self.certificate_page.first_row_purchase_date.text == self.purchase_datetime or \
+               self.certificate_page.first_row_purchase_date.text == self.purchase_datetime_plus_one_minute,\
             "Wrong purchase date in the table!"
         if cert.certificate_type != "Specific Dollar Amount":
             assert self.certificate_page.first_row_activity.text == cert.activity, "Wrong activity in the table!"
@@ -69,9 +72,11 @@ class CertificateActions:
         # check for Quantity field
 
     def get_purchase_datetime(self):
-        self.purchase_datetime = datetime.now(tz=pytz.timezone('US/Central'))
-        self.purchase_datetime = self.purchase_datetime.strftime('%m/%d/%Y %I:%M %p CT').lstrip("0").replace(" 0", " ")
-        return self.purchase_datetime
+        self.now = datetime.now(tz=pytz.timezone('US/Central'))
+        self.purchase_datetime = self.now.strftime('%m/%d/%Y %I:%M %p CT').lstrip("0").replace(" 0", " ")
+        self.purchase_datetime_plus_one_minute = self.now + timedelta(minutes=1)
+        self.purchase_datetime_plus_one_minute = self.purchase_datetime_plus_one_minute.strftime('%m/%d/%Y %I:%M %p CT').lstrip("0").replace(" 0", " ")
+        return self.purchase_datetime, self.purchase_datetime_plus_one_minute
 
     def enter_payment_information(self, cert):
         if cert.charge_type == 'creditcard':

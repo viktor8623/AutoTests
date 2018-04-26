@@ -80,7 +80,7 @@ class CertificateActions:
 
     def enter_payment_information(self, cert):
         if cert.charge_type == 'creditcard':
-            sleep(4)
+            wait(lambda: self.certificate_page.card_number_input.is_enabled())
             self.certificate_page.card_number_input.send_keys(cert.card_number)
             self.certificate_page.card_date_input.send_keys(cert.card_date)
             self.certificate_page.card_cvc_input.send_keys(cert.card_cvc)

@@ -1,254 +1,105 @@
-from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
+from webium import BasePage, Find, Finds
+from webium.driver import get_driver
+import time
 
 
-class CustomerBookingPage:
+class CustomerBookingPage(BasePage):
 
-    def __init__(self, driver):
-        self.driver = driver
+    url = None
 
-    def open(self, customer_URL):
-        self.driver.get(customer_URL)
+    # Step 1/5: Pick Tickets inputs.
 
-    # Step 1/5: Pick Tickets.
-
-    @property
-    def first_tickets_type_input(self):
-        return self.driver.find_element_by_xpath("//div[@class='row'][1]//input")
-
-    @property
-    def second_tickets_type_input(self):
-        return self.driver.find_element_by_xpath("//div[@class='row'][2]//input")
-
-    @property
-    def third_tickets_type_input(self):
-        return self.driver.find_element_by_xpath("//div[@class='row'][3]//input")
-
-    @property
-    def fourth_tickets_type_input(self):
-        return self.driver.find_element_by_xpath("//div[@class='row'][4]//input")
+    first_tickets_type_input = Find(by=By.XPATH, value="//div[@class='row'][1]//input")
+    second_tickets_type_input = Find(by=By.XPATH, value="//div[@class='row'][2]//input")
+    third_tickets_type_input = Find(by=By.XPATH, value="//div[@class='row'][3]//input")
+    fourth_tickets_type_input = Find(by=By.XPATH, value="//div[@class='row'][4]//input")
 
     # Titles under the pictures.
-
-    @property
-    def first_tickets_name(self):
-        return self.driver.find_element_by_xpath("//div[@class='row'][1]//div[@class='pill-box-left']/p").text
-
-    @property
-    def second_tickets_name(self):
-        return self.driver.find_element_by_xpath("//div[@class='row'][2]//div[@class='pill-box-left']/p").text
-
-    @property
-    def third_tickets_name(self):
-        return self.driver.find_element_by_xpath("//div[@class='row'][3]//div[@class='pill-box-left']/p").text
-
-    @property
-    def fourth_tickets_name(self):
-        return self.driver.find_element_by_xpath("//div[@class='row'][4]//div[@class='pill-box-left']/p").text
+    first_tickets_name = Find(by=By.XPATH, value="//div[@class='row'][1]//div[@class='pill-box-left']/p")
+    second_tickets_name = Find(by=By.XPATH, value="//div[@class='row'][2]//div[@class='pill-box-left']/p")
+    third_tickets_name = Find(by=By.XPATH, value="//div[@class='row'][3]//div[@class='pill-box-left']/p")
+    fourth_tickets_name = Find(by=By.XPATH, value="//div[@class='row'][4]//div[@class='pill-box-left']/p")
 
     # Current tickets table.
-
-    def wait_until_table_appear(self):
-        table = self.driver.find_element_by_xpath("//div[@class='ticketDetails']")
-        wait = WebDriverWait(self.driver, 30)
-        wait.until(EC.visibility_of(table))
-
-    @property
-    def current_tickets_first_row(self):
-        return self.driver.find_element_by_xpath("//div[@class='ticketDetails']/p[1]").text
-
-    @property
-    def current_tickets_second_row(self):
-        return self.driver.find_element_by_xpath("//div[@class='ticketDetails']/p[2]").text
-
-    @property
-    def current_tickets_third_row(self):
-        return self.driver.find_element_by_xpath("//div[@class='ticketDetails']/p[3]").text
-
-    @property
-    def current_tickets_fourth_row(self):
-        return self.driver.find_element_by_xpath("//div[@class='ticketDetails']/p[4]").text
-
-    @property
-    def next_button_1(self):
-        return self.driver.find_element_by_xpath("//button[@id='ticketBookbtn']")
+    current_tickets_first_row = Find(by=By.XPATH, value="//div[@class='ticketDetails']/p[1]")
+    current_tickets_second_row = Find(by=By.XPATH, value="//div[@class='ticketDetails']/p[2]")
+    current_tickets_third_row = Find(by=By.XPATH, value="//div[@class='ticketDetails']/p[3]")
+    current_tickets_fourth_row = Find(by=By.XPATH, value="//div[@class='ticketDetails']/p[4]")
+    next_button_1 = Find(by=By.XPATH, value="//button[@id='ticketBookbtn']")
 
     # Step 2/5: Choose Date.
 
-    def select_date(self, year, month, day):
-        datepicker = self.driver.find_element_by_css_selector("#datepicker")
-        wait = WebDriverWait(self.driver, 10)
-        wait.until(EC.visibility_of(datepicker))
-        self.driver.find_element_by_xpath("//a[@class='ui-state-default']").click()
-        # self.driver.find_element_by_xpath("//a[contains(@class, 'ui-state-default ui-state-hover')]").click()
-        self.driver.execute_script("$('#datepicker').datepicker('setDate', new Date(%s, %s-1, %s));" % (year, month, day))
-
-    @property
-    def next_button_2(self):
-        return self.driver.find_element_by_xpath("//button[@id='calenderbtn']")
+    next_button_2 = Find(by=By.XPATH, value="//button[@id='calenderbtn']")
 
     # Step 3/5: Choose Time.
 
-    def pick_time_button(self, time):
-        path = "//p[contains(.,'" + time + "')]/../../div[@class='timePill-right']/p"
-        self.driver.find_element_by_xpath(path).click()
-
-    def wait_until_button_3_clickable(self):
-        wait = WebDriverWait(self.driver, 10)
-        wait.until(EC.element_to_be_clickable((By.XPATH, "//button[@id='btneventSelect']")))
-
-    @property
-    def next_button_3(self):
-        return self.driver.find_element_by_xpath("//button[@id='btneventSelect']")
+    next_button_3 = Find(by=By.XPATH, value="//button[@id='btneventSelect']")
 
     # Step 4/5: Your Info.
 
-    @property
-    def first_name_input(self):
-        return self.driver.find_element_by_xpath("//input[@id='contactFirstName']")
-
-    @property
-    def last_name_input(self):
-        return self.driver.find_element_by_xpath("//input[@id='contactLastName']")
-
-    @property
-    def phone_input(self):
-        return self.driver.find_element_by_xpath("//input[@id='contactPhone']")
-
-    @property
-    def email_input(self):
-        return self.driver.find_element_by_xpath("//input[@id='contactEmail']")
-
-    @property
-    def zip_input(self):
-        return self.driver.find_element_by_xpath("//input[@id='contactZipCode']")
-
-    @property
-    def next_button_4(self):
-        return self.driver.find_element_by_xpath("//button[@id='contactinforbtn']")
+    first_name_input = Find(by=By.XPATH, value="//input[@id='contactFirstName']")
+    last_name_input = Find(by=By.XPATH, value="//input[@id='contactLastName']")
+    phone_input = Find(by=By.XPATH, value="//input[@id='contactPhone']")
+    email_input = Find(by=By.XPATH, value="//input[@id='contactEmail']")
+    zip_input = Find(by=By.XPATH, value="//input[@id='contactZipCode']")
+    next_button_4 = Find(by=By.XPATH, value="//button[@id='contactinforbtn']")
 
     # Final Step: Checkout
 
-    @property
-    def promo_code_input(self):
-        return self.driver.find_element_by_xpath("//input[@id='discount_code']")
+    promo_code_input = Find(by=By.XPATH, value="//input[@id='discount_code']")
+    promo_code_button = Find(by=By.XPATH, value="//input[@id='discountBtnCode']")
+    gift_certificate_input = Find(by=By.XPATH, value="//input[@id='gift_certificate']")
+    gift_certificate_button = Find(by=By.XPATH, value="//input[@id='redeemBtnCode']")
+    card_number_input = Find(by=By.XPATH, value="input[name=cardnumber]")
+    card_date_input = Find(by=By.XPATH, value="input[name=exp-date]")
+    card_cvc_input = Find(by=By.XPATH, value="input[name=cvc]")
+    card_zip_input = Find(by=By.XPATH, value="input[name=postal]")
+    next_button_5 = Find(by=By.XPATH, value="//button[@class='btn btn-lg btn-blue']")
 
-    @property
-    def promo_code_button(self):
-        return self.driver.find_element_by_xpath("//input[@id='discountBtnCode']")
+    # Information on the page.
 
-    @property
-    def gift_certificate_input(self):
-        return self.driver.find_element_by_xpath("//input[@id='gift_certificate']")
-
-    @property
-    def gift_certificate_button(self):
-        return self.driver.find_element_by_xpath("//input[@id='redeemBtnCode']")
-
-    def switch_to_payment(self):
-        payment = self.driver.find_element_by_xpath("//iframe[@name='__privateStripeFrame3']")
-        self.driver.switch_to_frame(payment)
-
-    def out_from_payment(self):
-        self.driver.switch_to_default_content()
-
-    @property
-    def card_number_input(self):
-        return self.driver.find_element_by_css_selector("input[name=cardnumber]")
-
-    @property
-    def card_date_input(self):
-        return self.driver.find_element_by_css_selector("input[name=exp-date]")
-
-    @property
-    def card_cvc_input(self):
-        return self.driver.find_element_by_css_selector("input[name=cvc]")
-
-    @property
-    def card_zip_input(self):
-        return self.driver.find_element_by_css_selector("input[name=postal]")
-
-    @property
-    def next_button_5(self):
-        return self.driver.find_element_by_xpath("//button[@class='btn btn-lg btn-blue']")
-
-        # Information on the page.
-
-    @property
-    def checkout_activity(self):
-        return self.driver.find_element_by_xpath("//div[@class='row lowBlue']//h2").text
-
-    @property
-    def checkout_date(self):
-        return self.driver.find_element_by_xpath("//p[@class='tourDate']").text
-
-    @property
-    def checkout_time(self):
-        return self.driver.find_element_by_xpath("//p[@class='tourTime']").text
-
-    @property
-    def checkout_first_tickets(self):
-        return self.driver.find_element_by_xpath("//div[@id='tckTypes']/p[1]").text
-
-    @property
-    def checkout_second_tickets(self):
-        return self.driver.find_element_by_xpath("//div[@id='tckTypes']/p[2]").text
-
-    @property
-    def checkout_third_tickets(self):
-        return self.driver.find_element_by_xpath("//div[@id='tckTypes']/p[3]").text
-
-    @property
-    def checkout_fourth_tickets(self):
-        return self.driver.find_element_by_xpath("//div[@id='tckTypes']/p[4]").text
-
-    @property
-    def tickets_cost(self):
-        return self.driver.find_element_by_xpath("//div[@id='ticketbaseprice']").text
-
-    @property
-    def tax(self):
-        return self.driver.find_element_by_xpath("//div[@id='taxesandfees']").text
-
-    @property
-    def total_price(self):
-        return self.driver.find_element_by_xpath("//div[@id='tickettotalprice']").text
+    checkout_activity = Find(by=By.XPATH, value="//div[@class='row lowBlue']//h2")
+    checkout_date = Find(by=By.XPATH, value="//p[@class='tourDate']")
+    checkout_time = Find(by=By.XPATH, value="//p[@class='tourTime']")
+    checkout_first_tickets = Find(by=By.XPATH, value="//div[@id='tckTypes']/p[1]")
+    checkout_second_tickets = Find(by=By.XPATH, value="//div[@id='tckTypes']/p[2]")
+    checkout_third_tickets = Find(by=By.XPATH, value="//div[@id='tckTypes']/p[3]")
+    checkout_fourth_tickets = Find(by=By.XPATH, value="//div[@id='tckTypes']/p[4]")
+    tickets_cost = Find(by=By.XPATH, value="//div[@id='ticketbaseprice']")
+    tax = Find(by=By.XPATH, value="//div[@id='taxesandfees']")
+    total_price = Find(by=By.XPATH, value="//div[@id='tickettotalprice']")
 
     # Summary Details.
 
-    @property
-    def customer_information(self):
-        return self.driver.find_element_by_xpath("//div[@id='summarynamelbl']").text
+    customer_information = Find(by=By.XPATH, value="//div[@id='summarynamelbl']")
+    zip_information = Find(by=By.XPATH, value="//div[@id='summaryAddresslbl']")
+    phone_information = Find(by=By.XPATH, value="//div[@id='summaryPhonelbl']")
+    email_information = Find(by=By.XPATH, value="//div[@id='summaryEmaillbl']")
+    ticket_total = Find(by=By.XPATH, value="//div[@id='ticketTotallbl']")
+    booking_fee = Find(by=By.XPATH, value="//div[@id='bookingFeeslbl']")
+    discount = Find(by=By.XPATH, value="//div[@id='discountlbl']")
+    tax_information = Find(by=By.XPATH, value="//div[@id='taxlbl']")
+    grand_total = Find(by=By.XPATH, value="//div[@id='subTotallbl']")
 
-    @property
-    def zip_information(self):
-        return self.driver.find_element_by_xpath("//div[@id='summaryAddresslbl']").text
 
-    @property
-    def phone_information(self):
-        return self.driver.find_element_by_xpath("//div[@id='summaryPhonelbl']").text
 
-    @property
-    def email_information(self):
-        return self.driver.find_element_by_xpath("//div[@id='summaryEmaillbl']").text
+if __name__ == '__main__':
+    customer_page = CustomerBookingPage()
+    customer_page.open()
+    customer_page.first_tickets_type_input.send_keys('1')
+    customer_page.second_tickets_type_input.send_keys('2')
+    time.sleep(10)
+    get_driver().quit()
 
-    @property
-    def ticket_total(self):
-        return self.driver.find_element_by_xpath("//div[@id='ticketTotallbl']").text
 
-    @property
-    def booking_fee(self):
-        return self.driver.find_element_by_xpath("//div[@id='bookingFeeslbl']").text
 
-    @property
-    def discount(self):
-        return self.driver.find_element_by_xpath("//div[@id='discountlbl']").text
 
-    @property
-    def tax(self):
-        return self.driver.find_element_by_xpath("//div[@id='taxlbl']").text
 
-    @property
-    def grand_total(self):
-        return self.driver.find_element_by_xpath("//div[@id='subTotallbl']").text
+
+
+
+
+
+
+

@@ -9,3 +9,4 @@ class NavigationBar(BasePage):
     logout = Find(by=By.XPATH, value="//ul[contains(@class, 'dropdown-menu dropdown-menu-right')]/li[5]/a")
     main_actions_drop_down = Find(by=By.CSS_SELECTOR, value=".dropdown")
     sell_gift_certificates = Find(by=By.CSS_SELECTOR, value="[href = 'giftcertificate.aspx']")
+    add_a_booking = Find(by=By.XPATH, value="//*[@class='nav navbar-nav navbar-right']//a[text()='Add a Booking']")

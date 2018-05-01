@@ -1,14 +1,11 @@
-from time import sleep
-from webium import wait
-from selenium.common.exceptions import InvalidElementStateException
-from selenium.webdriver.support import ui
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from pages.navigation_bar import NavigationBar
-from pages.certificate_page import CertificatePage
 from datetime import datetime, timedelta
+
 import pytz
+from webium import wait
 from webium.wait import wait
+
+from pages.certificate_page import CertificatePage
+from pages.navigation_bar import NavigationBar
 
 
 class CertificateActions:

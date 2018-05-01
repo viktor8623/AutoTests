@@ -1,5 +1,8 @@
 from selenium import webdriver
 import webium.settings
+
+from actions.customer_booking import CustomerActions
+from actions.admin_booking import AdminBooking
 from app.session import SessionHelper
 from actions.certificate import CertificateActions
 from app.booking import BookingHelper
@@ -18,7 +21,7 @@ class Application:
         self.driver.implicitly_wait(15)
         webium.settings.wait_timeout = 5
         self.session = SessionHelper(self)
-        # self.booking = BookingHelper(self)
+        self.booking = AdminBooking(self)
         self.certificate = CertificateActions(self)
 
 

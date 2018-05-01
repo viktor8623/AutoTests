@@ -1,4 +1,5 @@
 from app.application import Application
+from app.customer import Customer
 import pytest
 import json
 import os.path
@@ -22,6 +23,13 @@ def app(request):
     fixture.session.ensure_login(login=target['login'], password=target['password'])
     return fixture
 
+
+@pytest.fixture
+def customer(request):
+    global fixture
+    browser = request.config.getoption("--browser")
+    fixture = Customer(browser=browser)
+    return fixture
 
 @pytest.fixture(scope="session", autouse=True)
 def stop(request):

@@ -70,9 +70,10 @@ class CertificateActions:
 
     def get_purchase_datetime(self):
         self.now = datetime.now(tz=pytz.timezone('US/Central'))
-        self.purchase_datetime = self.now.strftime('%m/%d/%Y %I:%M %p CT').lstrip("0").replace(" 0", " ")
+        self.purchase_datetime = self.now.strftime('%m/%d/%Y %I:%M %p CT').lstrip("0").replace(" 0", " ").replace("/0", "/")
         self.purchase_datetime_plus_one_minute = self.now + timedelta(minutes=1)
-        self.purchase_datetime_plus_one_minute = self.purchase_datetime_plus_one_minute.strftime('%m/%d/%Y %I:%M %p CT').lstrip("0").replace(" 0", " ")
+        self.purchase_datetime_plus_one_minute = self.purchase_datetime_plus_one_minute.strftime('%m/%d/%Y %I:%M %p CT')\
+            .lstrip("0").replace(" 0", " ").replace("/0", "/")
         return self.purchase_datetime, self.purchase_datetime_plus_one_minute
 
     def enter_payment_information(self, cert):

@@ -42,9 +42,11 @@ class CertificateActions:
             format(float(cert.initial_amount)), "Wrong initial amount in the table!"
         assert self.certificate_page.first_row_remain_amount.text == "$" + "{0:,.2f}".format(float(cert.initial_amount)),\
             "Wrong remain amount in the table!"
-        assert self.certificate_page.first_row_purchase_date.text == self.purchase_datetime or \
-               self.certificate_page.first_row_purchase_date.text == self.purchase_datetime_plus_one_minute,\
-            "Wrong purchase date in the table!"
+        assert (self.certificate_page.first_row_purchase_date.text == self.purchase_datetime or
+                self.certificate_page.first_row_purchase_date.text == self.purchase_datetime_plus_one_minute,
+                "Wrong purchase date in the table! '%s' != '%s' or '%s'" %
+                (self.certificate_page.first_row_purchase_date.text, self.purchase_datetime,
+                 self.purchase_datetime_plus_one_minute))
         if cert.certificate_type != "Specific Dollar Amount":
             assert self.certificate_page.first_row_activity.text == cert.activity, "Wrong activity in the table!"
         if cert.name_first_tickets_type is not None:

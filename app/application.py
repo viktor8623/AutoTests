@@ -5,7 +5,6 @@ from actions.customer_booking import CustomerActions
 from actions.admin_booking import AdminBooking
 from app.session import SessionHelper
 from actions.certificate import CertificateActions
-from app.booking import BookingHelper
 
 
 class Application:

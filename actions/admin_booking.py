@@ -1,5 +1,6 @@
 from pages.admin_booking import AdminBookingPage
 from pages.navigation_bar import NavigationBar
+from webium.wait import wait
 
 
 class AdminBooking:
@@ -59,14 +60,16 @@ class AdminBooking:
         assert self.booking_page.giftcertificate.text == tickets.gift_certificate, "Wrong discount (gift certificate)!"
         assert self.booking_page.taxes.text == tickets.taxes, "Wrong taxes!"
         assert self.booking_page.booking_fee.text == tickets.booking_fee, "Wrong booking fee!"
-        assert self.booking_page.grand_total.text == tickets.grand_total, "Wrong grand total!"
+        assert self.booking_page.grand_total.text == tickets.grand_total, "Wrong grand total! %s" % \
+                                                                          self.booking_page.grand_total.text
 
-    def submit_booking(self):
+    def submit_successful_booking(self):
         self.booking_page.submit_booking_button.click()
-        assert self.booking_page.final_alert.text == "Booking Successful!"
+        wait(lambda: self.booking_page.final_alert.is_displayed(), timeout_seconds=100)
+        assert self.booking_page.final_alert.text == "Booking Successful!", "Wrong text of the final alert: '%s'" % \
+                                                                            self.booking_page.final_alert.text
+        self.booking_page.final_alert_ok_button.click()
 
     def refresh_page(self):
         self.booking_page._driver.refresh()
-
-
 

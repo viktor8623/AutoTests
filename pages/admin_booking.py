@@ -44,6 +44,7 @@ class AdminBookingPage(BasePage):
     cash_recieved = Find(by=By.XPATH, value="//input[@type='checkbox']")
     submit_booking_button = Find(by=By.XPATH, value="//div[contains(text(), 'Submit Booking')]")
     final_alert = Find(by=By.XPATH, value="//div[@class='modal-body ng-binding']")
+    final_alert_ok_button = Find(by=By.XPATH, value="//div[@class='modal-footer']/button[text()='Ok']")
 
     # Charge (payment) table.
 

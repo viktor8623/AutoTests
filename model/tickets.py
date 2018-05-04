@@ -28,6 +28,7 @@ class Tickets:
         self.payment_type = kwargs.get('payment_type')
         self.saved_card = kwargs.get('saved_card')
         self.card_number = kwargs.get('card_number')
+        self.declined_card_number = kwargs.get('declined_card_number')
         self.card_date = kwargs.get('card_date')
         self.card_cvc = kwargs.get('card_cvc')
         self.card_zip = kwargs.get('card_zip')

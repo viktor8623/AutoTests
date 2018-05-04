@@ -43,6 +43,15 @@ class AdminBooking:
         self.booking_page.empty_space.click()
         self.booking_page.complete_booking_button.click()
 
+    def submit_declined_card(self, tickets):
+        self.booking_page.select_payment_type(tickets.payment_type)
+        self.booking_page.enter_cc_info(tickets.declined_card_number, tickets.card_date, tickets.card_cvc, tickets.card_zip)
+        self.booking_page.submit_booking_button.click()
+        wait(lambda: self.booking_page.final_alert.is_displayed(), timeout_seconds=100)
+        assert self.booking_page.final_alert.text == "Credit card declined: please try again.",\
+            "Wrong text of the final alert: '%s'" % self.booking_page.final_alert.text
+        self.booking_page.final_alert_ok_button.click()
+
     def select_payment_method(self, tickets):
         self.booking_page.select_payment_type(tickets.payment_type)
         if tickets.payment_type == "Credit Card":

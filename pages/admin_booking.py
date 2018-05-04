@@ -37,10 +37,11 @@ class AdminBookingPage(BasePage):
 
     payment_type_list = Find(by=By.XPATH, value="//select[@ng-model='bookingdrawer.paymentType']")
     credit_card_list = Find(by=By.XPATH, value="//select[@ng-model='bookingdrawer.preselectedCard']")
-    card_number_input = Find(by=By.XPATH, value="//input[contains(@class, '__PrivateStripeElement')]")
-    card_date_input = Find(by=By.XPATH, value="//input[contains(@class, '__PrivateStripeElement')]")
-    card_cvc_input = Find(by=By.XPATH, value="//input[contains(@class, '__PrivateStripeElement')]")
-    card_zip_input = Find(by=By.XPATH, value="//input[contains(@class, '__PrivateStripeElement')]")
+    stripe = Find(by=By.XPATH, value="//iframe[@name='__privateStripeFrame4']")
+    card_number_input = Find(by=By.XPATH, value="//input[@name='cardnumber']")
+    card_date_input = Find(by=By.XPATH, value="//input[@name='exp-date']")
+    card_cvc_input = Find(by=By.XPATH, value="//input[@name='cvc']")
+    card_zip_input = Find(by=By.XPATH, value="//input[@name='postal']")
     cash_recieved = Find(by=By.XPATH, value="//input[@type='checkbox']")
     submit_booking_button = Find(by=By.XPATH, value="//div[contains(text(), 'Submit Booking')]")
     final_alert = Find(by=By.XPATH, value="//div[@class='modal-body ng-binding']")
@@ -58,6 +59,7 @@ class AdminBookingPage(BasePage):
 
     def select_activity(self, activity):
         Select(self.activity_list).select_by_visible_text(activity)
+        sleep(1)
 
     def select_date(self, year, month, day, total):
         wait(lambda: self.grand_total.text == total, timeout_seconds=30)
@@ -79,11 +81,16 @@ class AdminBookingPage(BasePage):
 
     def enter_cc_info(self, card_number, card_date, card_cvc, card_zip):
         Select(self.credit_card_list).select_by_visible_text("New Card")
+        wait(lambda: self.stripe.is_enabled())
+        self._driver.switch_to.frame(self.stripe)
         wait(lambda: self.card_number_input.is_enabled())
+        self.card_number_input.clear()
         self.card_number_input.send_keys(card_number)
         self.card_date_input.send_keys(card_date)
         self.card_cvc_input.send_keys(card_cvc)
-        self.card_zip_input.send_keys(card_zip)
+        if card_zip is not None:
+            self.card_zip_input.send_keys(card_zip)
+        self._driver.switch_to.default_content()
 
     def select_saved_card(self, saved_card):
         Select(self.credit_card_list).select_by_visible_text(saved_card)

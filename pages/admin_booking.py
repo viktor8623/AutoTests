@@ -59,8 +59,9 @@ class AdminBookingPage(BasePage):
     def select_activity(self, activity):
         Select(self.activity_list).select_by_visible_text(activity)
 
-    def select_date(self, year, month, day):
-        sleep(3)
+    def select_date(self, year, month, day, total):
+        wait(lambda: self.grand_total.text == total, timeout_seconds=30)
+        sleep(2)
         self._driver.execute_script(
             "$('#datepicker_1').datepicker('setDate', new Date(%s, %s-1, %s));" % (year, month, day))
 

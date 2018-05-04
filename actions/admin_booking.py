@@ -15,7 +15,7 @@ class AdminBooking:
         self.navigate_to()
         self.booking_page.select_activity(tickets.activity)
         self.select_tickets(tickets)
-        self.booking_page.select_date(tickets.year, tickets.month, tickets.day)
+        self.booking_page.select_date(tickets.year, tickets.month, tickets.day, tickets.grand_total)
         self.booking_page.select_time(tickets.time)
 
     def navigate_to(self):

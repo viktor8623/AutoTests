@@ -2,50 +2,42 @@
 
 class Tickets:
 
-    def __init__(self, id_testdata=None, customer_URL=None, activity=None, first_tickets_type=None,
-                 second_tickets_type=None, third_tickets_type=None, fourth_tickets_type=None,
-                 name_first_tickets_type=None, name_second_tickets_type=None,
-                 name_third_tickets_type=None, name_fourth_tickets_type=None, year=None, month=None, day=None,
-                 time=None, first_name=None, last_name=None, phone=None, email=None, zip_code=None, promo_code=None,
-                 gift_certificate_code=None, payment_type=None, saved_card=None,
-                 card_number=None, card_date=None, card_cvc=None, card_zip=None, cash_recieved=None,
-                 ticket_total=None, discount=None, gift_certificate=None, taxes=None, booking_fee=None,
-                 grand_total=None):
-        self.id_testdata = id_testdata
-        self.customer_URL = customer_URL
-        self.activity = activity
-        self.first_tickets_type = first_tickets_type
-        self.second_tickets_type = second_tickets_type
-        self.third_tickets_type = third_tickets_type
-        self.fourth_tickets_type = fourth_tickets_type
-        self.name_first_tickets_type = name_first_tickets_type
-        self.name_second_tickets_type = name_second_tickets_type
-        self.name_third_tickets_type = name_third_tickets_type
-        self.name_fourth_tickets_type = name_fourth_tickets_type
-        self.year = year
-        self.month = month
-        self.day = day
-        self.time = time
-        self.first_name = first_name
-        self.last_name = last_name
-        self.phone = phone
-        self.email = email
-        self.zip_code = zip_code
-        self.promo_code = promo_code
-        self.gift_certificate_code = gift_certificate_code
-        self.payment_type = payment_type
-        self.saved_card = saved_card
-        self.card_number = card_number
-        self.card_date = card_date
-        self.card_cvc = card_cvc
-        self.card_zip = card_zip
-        self.cash_recieved = cash_recieved
-        self.ticket_total = ticket_total
-        self.discount = discount
-        self.gift_certificate = gift_certificate
-        self.taxes = taxes
-        self.booking_fee = booking_fee
-        self.grand_total = grand_total
+    def __init__(self, **kwargs):
+        self.id_testdata = kwargs.get('id_testdata')
+        self.customer_URL = kwargs.get('customer_URL')
+        self.activity = kwargs.get('activity')
+        self.first_tickets_type = kwargs.get('first_tickets_type')
+        self.second_tickets_type = kwargs.get('second_tickets_type')
+        self.third_tickets_type = kwargs.get('third_tickets_type')
+        self.fourth_tickets_type = kwargs.get('fourth_tickets_type')
+        self.name_first_tickets_type = kwargs.get('name_first_tickets_type')
+        self.name_second_tickets_type = kwargs.get('name_second_tickets_type')
+        self.name_third_tickets_type = kwargs.get('name_third_tickets_type')
+        self.name_fourth_tickets_type = kwargs.get('name_fourth_tickets_type')
+        self.year = kwargs.get('year')
+        self.month = kwargs.get('month')
+        self.day = kwargs.get('day')
+        self.time = kwargs.get('time')
+        self.first_name = kwargs.get('first_name')
+        self.last_name = kwargs.get('last_name')
+        self.phone = kwargs.get('phone')
+        self.email = kwargs.get('email')
+        self.zip_code = kwargs.get('zip_code')
+        self.promo_code = kwargs.get('promo_code')
+        self.gift_certificate_code = kwargs.get('gift_certificate_code')
+        self.payment_type = kwargs.get('payment_type')
+        self.saved_card = kwargs.get('saved_card')
+        self.card_number = kwargs.get('card_number')
+        self.card_date = kwargs.get('card_date')
+        self.card_cvc = kwargs.get('card_cvc')
+        self.card_zip = kwargs.get('card_zip')
+        self.cash_recieved = kwargs.get('cash_recieved')
+        self.ticket_total = kwargs.get('ticket_total')
+        self.discount = kwargs.get('discount')
+        self.gift_certificate = kwargs.get('gift_certificate')
+        self.taxes = kwargs.get('taxes')
+        self.booking_fee = kwargs.get('booking_fee')
+        self.grand_total = kwargs.get('grand_total')
 
     def __repr__(self):
-        return "%s" % (self.id_testdata)
+        return self.id_testdata

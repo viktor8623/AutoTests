@@ -1,6 +1,7 @@
 from pages.admin_booking import AdminBookingPage
 from pages.navigation_bar import NavigationBar
 from webium.wait import wait
+from time import sleep
 
 
 class AdminBooking:
@@ -31,7 +32,7 @@ class AdminBooking:
             self.booking_page.third_tickets_type.send_keys(tickets.third_tickets_type)
         if tickets.fourth_tickets_type is not None:
             self.booking_page.fourth_tickets_type.send_keys(tickets.fourth_tickets_type)
-        self.booking_page.name_first_tickets_type.click()
+        self.booking_page.empty_space_first_tab.click()
 
     def fill_out_customer_info(self, tickets):
         self.booking_page.click_enter_customer_information()
@@ -51,6 +52,7 @@ class AdminBooking:
         assert self.booking_page.final_alert.text == "Credit card declined: please try again.",\
             "Wrong text of the final alert: '%s'" % self.booking_page.final_alert.text
         self.booking_page.final_alert_ok_button.click()
+        sleep(1)
 
     def select_payment_method(self, tickets):
         self.booking_page.select_payment_type(tickets.payment_type)

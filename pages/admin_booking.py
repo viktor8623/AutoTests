@@ -15,6 +15,7 @@ class AdminBookingPage(BasePage):
     second_tickets_type = Find(by=By.XPATH, value="//tbody/tr[2]//input")
     third_tickets_type = Find(by=By.XPATH, value="//tbody/tr[3]//input")
     fourth_tickets_type = Find(by=By.XPATH, value="//tbody/tr[4]//input")
+    empty_space_first_tab = Find(by=By.XPATH, value="//h1[text()='Add Booking']")
     name_first_tickets_type = Find(by=By.XPATH, value="//div[@class='form-group']//tbody/tr[1]/td[1]")
     name_second_tickets_type = Find(by=By.XPATH, value="//div[@class='form-group']//tbody/tr[2]/td[1]")
     name_third_tickets_type = Find(by=By.XPATH, value="//div[@class='form-group']//tbody/tr[3]/td[1]")
@@ -58,11 +59,12 @@ class AdminBookingPage(BasePage):
 
 
     def select_activity(self, activity):
+        sleep(2)
         Select(self.activity_list).select_by_visible_text(activity)
-        sleep(1)
+        sleep(2)
 
     def select_date(self, year, month, day, total):
-        wait(lambda: self.grand_total.text == total, timeout_seconds=30)
+        wait(lambda: self.grand_total.text == total, timeout_seconds=30, waiting_for="Waiting until the pricing table is updated.")
         sleep(2)
         self._driver.execute_script(
             "$('#datepicker_1').datepicker('setDate', new Date(%s, %s-1, %s));" % (year, month, day))
@@ -85,6 +87,8 @@ class AdminBookingPage(BasePage):
         self._driver.switch_to.frame(self.stripe)
         wait(lambda: self.card_number_input.is_enabled())
         self.card_number_input.clear()
+        # wait(lambda: self.card_number_input.is_enabled())
+        # sleep(1)
         self.card_number_input.send_keys(card_number)
         self.card_date_input.send_keys(card_date)
         self.card_cvc_input.send_keys(card_cvc)

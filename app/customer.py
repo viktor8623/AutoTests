@@ -16,4 +16,4 @@ class Customer:
         self.driver.maximize_window()
         self.driver.implicitly_wait(15)
         webium.settings.wait_timeout = 5
-        self.customer = CustomerActions(self)
+        self.booking = CustomerActions(self)

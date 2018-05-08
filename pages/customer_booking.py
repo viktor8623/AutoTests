@@ -6,7 +6,8 @@ import time
 
 class CustomerBookingPage(BasePage):
 
-    url = None
+    def __init__(self, **kwargs):
+        super(CustomerBookingPage, self).__init__(**kwargs)
 
     # Step 1/5: Pick Tickets inputs.
 
@@ -14,6 +15,7 @@ class CustomerBookingPage(BasePage):
     second_tickets_type_input = Find(by=By.XPATH, value="//div[@class='row'][2]//input")
     third_tickets_type_input = Find(by=By.XPATH, value="//div[@class='row'][3]//input")
     fourth_tickets_type_input = Find(by=By.XPATH, value="//div[@class='row'][4]//input")
+    empty_space_first_page = Find(by=By.XPATH, value="//h4[text()='Step 1/5: Pick Tickets']")
 
     # Titles under the pictures.
     first_tickets_name = Find(by=By.XPATH, value="//div[@class='row'][1]//div[@class='pill-box-left']/p")
@@ -30,6 +32,7 @@ class CustomerBookingPage(BasePage):
 
     # Step 2/5: Choose Date.
 
+    datepicker = Find(by=By.XPATH, value="//table[@class='ui-datepicker-calendar']")
     next_button_2 = Find(by=By.XPATH, value="//button[@id='calenderbtn']")
 
     # Step 3/5: Choose Time.
@@ -85,7 +88,7 @@ class CustomerBookingPage(BasePage):
 
 
 if __name__ == '__main__':
-    customer_page = CustomerBookingPage()
+    customer_page = CustomerBookingPage(url="https://dev.godo.io/customer_facing.aspx?Activity=b5382243-b660-451f-a2e0-c9a99dac7045")
     customer_page.open()
     customer_page.first_tickets_type_input.send_keys('1')
     customer_page.second_tickets_type_input.send_keys('2')

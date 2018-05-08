@@ -1,5 +1,6 @@
 from pages.login_page import LoginPage
 from pages.navigation_bar import NavigationBar
+from time import sleep
 
 
 class SessionHelper:
@@ -24,6 +25,7 @@ class SessionHelper:
         self.navigation_bar.logout.click()
 
     def ensure_logout(self):
+        sleep(2)
         if self.is_logged_in_as_admin():
             self.logout()
 

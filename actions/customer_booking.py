@@ -1,15 +1,44 @@
 from pages.customer_booking import CustomerBookingPage
 from selenium.webdriver.common.keys import Keys
-import time
+from time import sleep
 
 class CustomerActions:
 
     def __init__(self, app):
         self.driver = app.driver
-        self.booking = CustomerBookingPage(driver=self.driver)
+        self.booking = None
 
-    def book_ticket(self, tickets):
-        self.booking.open(url=tickets.customer_URL)
+    def open_page(self, tickets):
+        self.booking = CustomerBookingPage(driver=self.driver, url=tickets.customer_URL)
+        self.booking.open()
+
+    def select_tickets(self, tickets):
+        if tickets.first_tickets_type is not None:
+            self.booking.first_tickets_type_input.clear()
+            self.booking.first_tickets_type_input.send_keys(tickets.first_tickets_type)
+        if tickets.second_tickets_type is not None:
+            self.booking.first_tickets_type_input.clear()
+            self.booking.second_tickets_type_input.send_keys(tickets.second_tickets_type)
+        if tickets.third_tickets_type is not None:
+            self.booking.first_tickets_type_input.clear()
+            self.booking.third_tickets_type_input.send_keys(tickets.third_tickets_type)
+        if tickets.fourth_tickets_type is not None:
+            self.booking.first_tickets_type_input.clear()
+            self.booking.fourth_tickets_type_input.send_keys(tickets.fourth_tickets_type)
+        self.booking.empty_space_first_page.click()
+        self.booking.next_button_1.click()
+
+    def select_date(self, tickets):
+        # sleep(2)
+        self.booking.datepicker.click()
+        self.booking._driver.execute_script(
+            "$('#datepicker').datepicker('setDate', new Date(%s, %s-1, %s))" % (tickets.year, tickets.month, tickets.day))
+        # sleep(2)
+        self.booking.next_button_2.click()
+        sleep(5)
+
+
+        time.sleep(10)
     #     self.select_tickets(tickets)
     #     self.verify_first_page(tickets)
     #     self.customer.next_button_1.click()

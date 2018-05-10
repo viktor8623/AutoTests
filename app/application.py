@@ -1,10 +1,10 @@
-from selenium import webdriver
 import webium.settings
+from selenium import webdriver
 
-from actions.customer_booking import CustomerActions
 from actions.admin_booking import AdminBooking
-from app.session import SessionHelper
 from actions.certificate import CertificateActions
+from actions.activity_hub import ActivityHub
+from app.session import SessionHelper
 
 
 class Application:
@@ -22,7 +22,7 @@ class Application:
         self.session = SessionHelper(self)
         self.booking = AdminBooking(self)
         self.certificate = CertificateActions(self)
-
+        self.activity_hub = ActivityHub(self)
 
     def destroy(self):
         self.driver.quit()

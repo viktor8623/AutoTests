@@ -1,4 +1,5 @@
 from calendar import month_name
+from time import sleep
 
 from waiting import wait
 
@@ -79,11 +80,25 @@ class CustomerActions:
         assert self.booking.tax.text == "%.2f" % taxes_fees, "Wrong Taxes & Fees on the payment page!"
         assert self.booking.total_price.text == tickets.grand_total, "Wrong grand total on the payment page! '%s'" % \
                                                                      self.booking.total_price.text
+    def submit_declined_card(self, tickets):
+        self.booking.enter_cc_info(tickets.declined_card_number, tickets.card_date, tickets.card_cvc, tickets.card_zip)
+        wait(lambda: self.booking.next_button_5.is_enabled())
+        self.booking.next_button_5.click()
+        wait(lambda: len(self.booking.payment_notification.text) > 0, timeout_seconds=100)
+        assert self.booking.payment_notification.text == "Credit card declined: please try again.",\
+            "Wrong text of the final alert: '%s'" % self.booking.payment_notification.text
 
     def make_payment(self, tickets):
         self.booking.enter_cc_info(tickets.card_number, tickets.card_date, tickets.card_cvc, tickets.card_zip)
         wait(lambda: self.booking.next_button_5.is_enabled())
         self.booking.next_button_5.click()
+
+    def refill_payment_info(self, tickets):
+        self.booking.enter_cc_info(tickets.card_number, tickets.card_date, tickets.card_cvc, tickets.card_zip)
+        wait(lambda: self.booking.next_button_5.is_enabled())
+        while self.booking.next_button_5.text == 'Get Your Tickets!':
+            self.booking.next_button_5.click()
+            sleep(1)
 
     def verify_summary_details(self, tickets):
         wait(lambda: self.booking.customer_information.is_displayed())

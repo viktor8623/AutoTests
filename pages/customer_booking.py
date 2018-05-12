@@ -77,7 +77,8 @@ class CustomerBookingPage(BasePage):
     card_date_input = Find(by=By.XPATH, value="//input[@name='exp-date']")
     card_cvc_input = Find(by=By.XPATH, value="//input[@name='cvc']")
     card_zip_input = Find(by=By.XPATH, value="//input[@name='postal']")
-    next_button_5 = Find(by=By.XPATH, value="//button[@class='btn btn-lg btn-blue']")
+    payment_notification = Find(by=By.XPATH, value="//span[@id='CcErrorMsg']")
+    next_button_5 = Find(by=By.XPATH, value="//button[@id='submit-button']")
 
     # Information on the page.
 

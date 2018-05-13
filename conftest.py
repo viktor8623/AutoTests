@@ -33,7 +33,7 @@ def customer(request):
     fixture.destroy()
 
 
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture(scope="module", autouse=True)
 def stop(request):
     def fin():
         fixture.session.ensure_logout()

@@ -13,7 +13,6 @@ def test_customer_booking(customer, tickets):
     customer.booking.verify_payment_page(tickets)
     customer.booking.make_payment(tickets)
     customer.booking.verify_summary_details(tickets)
-    customer.booking.close()
 
 
 @pytest.mark.parametrize("tickets", testdata_cus2, ids=[repr(x) for x in testdata_cus2])
@@ -28,4 +27,9 @@ def test_customer_declines(customer, tickets):
     customer.booking.submit_declined_card(tickets)
     customer.booking.refill_payment_info(tickets)
     customer.booking.verify_summary_details(tickets)
-    customer.booking.close()
+
+
+@pytest.fixture
+def stop():
+    """Override admin's finalizer."""
+    pass

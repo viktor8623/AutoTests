@@ -2,6 +2,7 @@ from selenium import webdriver
 import webium.settings
 
 from actions.customer_booking import CustomerActions
+from actions.customer_certificate import CustomerCertActions
 
 
 class Customer:
@@ -17,6 +18,7 @@ class Customer:
         self.driver.implicitly_wait(15)
         webium.settings.wait_timeout = 5
         self.booking = CustomerActions(self)
+        self.certificate = CustomerCertActions(self)
 
     def destroy(self):
         self.driver.quit()

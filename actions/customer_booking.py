@@ -1,7 +1,7 @@
 from calendar import month_name
 from time import sleep
 
-from waiting import wait
+from webium.wait import wait
 
 from pages.customer_booking import CustomerBookingPage
 
@@ -47,7 +47,7 @@ class CustomerActions:
         self.booking.next_button_1.click()
 
     def select_date(self, tickets):
-        wait(lambda: self.booking.calendar.is_displayed())
+        wait(lambda: self.booking.calendar.is_displayed(), )
         self.booking._driver.execute_script(
             "$('#datepicker').datepicker('setDate', new Date(%s, %s-1, %s))" % (tickets.year, tickets.month, tickets.day))
         self.booking.click_date(tickets.day)
@@ -80,6 +80,7 @@ class CustomerActions:
         assert self.booking.tax.text == "%.2f" % taxes_fees, "Wrong Taxes & Fees on the payment page!"
         assert self.booking.total_price.text == tickets.grand_total, "Wrong grand total on the payment page! '%s'" % \
                                                                      self.booking.total_price.text
+
     def submit_declined_card(self, tickets):
         self.booking.enter_cc_info(tickets.declined_card_number, tickets.card_date, tickets.card_cvc, tickets.card_zip)
         wait(lambda: self.booking.next_button_5.is_enabled())
@@ -112,5 +113,3 @@ class CustomerActions:
         assert self.booking.tax_information.text == ("$" + tickets.taxes), "Summary Details: Wrong tax!"
         assert self.booking.grand_total.text == ("$" + tickets.grand_total), "Summary Details: Wrong grand total!"
 
-    def close(self):
-        self.booking.close_window()

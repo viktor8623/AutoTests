@@ -57,7 +57,6 @@ class AdminBookingPage(BasePage):
     booking_fee = Find(by=By.XPATH, value="//tr[contains(@ng-show, 'bookingfee')]/td[2]")
     grand_total = Find(by=By.XPATH, value="//tr[contains(@ng-show, 'grandTotal')]/td[2]")
 
-
     def select_activity(self, activity):
         sleep(2)
         Select(self.activity_list).select_by_visible_text(activity)

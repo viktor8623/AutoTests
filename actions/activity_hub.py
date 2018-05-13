@@ -1,6 +1,6 @@
 from time import sleep
 
-from waiting import wait
+from webium.wait import wait
 
 from pages.activity_hub_page import ActivityHubPage
 from pages.activity_page import AddEditActivityPage

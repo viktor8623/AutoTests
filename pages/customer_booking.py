@@ -2,7 +2,7 @@ from time import sleep
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
-from waiting import wait
+from webium.wait import wait
 from webium import BasePage, Find, Finds
 
 
@@ -134,7 +134,3 @@ class CustomerBookingPage(BasePage):
         if card_zip is not None:
             self.card_zip_input.send_keys(card_zip)
         self._driver.switch_to.default_content()
-
-    def close_window(self):
-        self._driver.quit()
-

@@ -17,3 +17,6 @@ class Customer:
         self.driver.implicitly_wait(15)
         webium.settings.wait_timeout = 5
         self.booking = CustomerActions(self)
+
+    def destroy(self):
+        self.driver.quit()

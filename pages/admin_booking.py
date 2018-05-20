@@ -43,7 +43,7 @@ class AdminBookingPage(BasePage):
     card_date_input = Find(by=By.XPATH, value="//input[@name='exp-date']")
     card_cvc_input = Find(by=By.XPATH, value="//input[@name='cvc']")
     card_zip_input = Find(by=By.XPATH, value="//input[@name='postal']")
-    cash_recieved = Find(by=By.XPATH, value="//input[@type='checkbox']")
+    cash_recieved = Find(by=By.XPATH, value="//input[@name='money-in-hand']")
     submit_booking_button = Find(by=By.XPATH, value="//div[contains(text(), 'Submit Booking')]")
     final_alert = Find(by=By.XPATH, value="//div[@class='modal-body ng-binding']")
     final_alert_ok_button = Find(by=By.XPATH, value="//div[@class='modal-footer']/button[text()='Ok']")

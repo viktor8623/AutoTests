@@ -33,12 +33,15 @@ class CertificatePage(BasePage):
     charge_type_label = Find(by=By.XPATH, value="//label[@for='chargetype']")
     charge_type_list = Find(by=By.CSS_SELECTOR, value="#chargetype")
     check_number_input = Find(by=By.CSS_SELECTOR, value="#charge_checknumbner")
-    card_number_input = Find(by=By.XPATH, value="//input[contains(@class, '__PrivateStripeElement')]")
-    card_date_input = Find(by=By.XPATH, value="//input[contains(@class, '__PrivateStripeElement')]")
-    card_cvc_input = Find(by=By.XPATH, value="//input[contains(@class, '__PrivateStripeElement')]")
-    card_zip_input = Find(by=By.XPATH, value="//input[contains(@class, '__PrivateStripeElement')]")
+    stripe = Find(by=By.XPATH, value="//iframe[contains(@name, '__privateStripeFrame')]")
+    card_number_input = Find(by=By.XPATH, value="//input[@name='cardnumber']")
+    card_date_input = Find(by=By.XPATH, value="//input[@name='exp-date']")
+    card_cvc_input = Find(by=By.XPATH, value="//input[@name='cvc']")
+    card_zip_input = Find(by=By.XPATH, value="//input[@name='postal']")
     save_button = Find(by=By.XPATH, value="//button[contains(.,'Save')]")
     cancel_button = Find(by=By.XPATH, value="//button[contains(.,'Cancel')]")
+    payment_alert = Find(by=By.XPATH, value="//div[@class='modal-body ng-binding']")
+    payment_alert_button = Find(by=By.XPATH, value="//button[text()='Ok']")
 
     def certificate_pop_up(self):
         return len(self.modal_pop_up) > 0
@@ -51,13 +54,24 @@ class CertificatePage(BasePage):
             Select(self.activity_list).select_by_visible_text(activity)
 
     def select_charge_type(self, charge_type):
-        self.charge_type_label.click()
         Select(self.charge_type_list).select_by_visible_text(charge_type)
+
+    def enter_cc_info(self, card_number, card_date, card_cvc, card_zip):
+        wait(lambda: self.stripe.is_enabled(), timeout_seconds=15)
+        self._driver.switch_to.frame(self.stripe)
+        wait(lambda: self.card_number_input.is_enabled())
+        self.card_number_input.clear()
+        self.card_number_input.send_keys(card_number)
+        self.card_date_input.send_keys(card_date)
+        self.card_cvc_input.send_keys(card_cvc)
+        if card_zip is not None:
+            self.card_zip_input.send_keys(card_zip)
+        self._driver.switch_to.default_content()
 
     def click_save_button(self):
         self.save_button.click()
-        wait(lambda: len(self.modal_pop_up) == 0)
+        wait(lambda: len(self.modal_pop_up) == 0, timeout_seconds=30)
 
     def click_cancel_button(self):
         self.cancel_button.click()
-        wait(lambda: len(self.modal_pop_up) == 0)
+        wait(lambda: len(self.modal_pop_up) == 0, timeout_seconds=30)

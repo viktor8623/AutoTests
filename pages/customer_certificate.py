@@ -55,7 +55,7 @@ class CustomerCertPage(BasePage):
         Select(web_element).select_by_visible_text(option)
 
     def enter_cc_info(self, card_number, card_date, card_cvc, card_zip):
-        wait(lambda: self.stripe.is_enabled())
+        wait(lambda: self.stripe.is_enabled(), timeout_seconds=15)
         self._driver.switch_to.frame(self.stripe)
         wait(lambda: self.card_number_input.is_displayed())
         self.card_number_input.clear()

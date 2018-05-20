@@ -46,10 +46,22 @@ class CustomerCertActions:
         assert self.certificate.full_charge.text == cert.total_amount, "Wrong full charge! '%s'" % \
                                                                        self.certificate.full_charge.text
 
-    def make_payment(self, cert):
+    def make_successful_payment(self, cert):
         self.certificate.enter_cc_info(cert.card_number, cert.card_date, cert.card_cvc, cert.card_zip)
         wait(lambda: self.certificate.pay_button.is_enabled())
+        attempt = 0
+        while self.certificate.pay_button.is_enabled() and attempt < 15:
+            self.certificate.pay_button.click()
+            attempt += 1
+            sleep(1)
+
+    def make_declined_payment(self, cert):
+        self.certificate.enter_cc_info(cert.declined_card_number, cert.card_date, cert.card_cvc, cert.card_zip)
+        wait(lambda: self.certificate.pay_button.is_enabled())
         self.certificate.pay_button.click()
+        wait(lambda: len(self.certificate.payment_notification.text) > 0, timeout_seconds=100)
+        assert self.certificate.payment_notification.text == "Credit card declined: please try again.",\
+            "Wrong text of the final alert: '%s'" % self.certificate.payment_notification.text
 
     def verify_summary_details(self, cert):
         self.certificate.close_final_alert()

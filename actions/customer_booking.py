@@ -69,6 +69,13 @@ class CustomerActions:
         wait(lambda: self.booking.next_button_4.is_enabled())
         self.booking.next_button_4.click()
 
+    def redeem_gift_certificate(self, tickets):
+        self.booking.gift_certificate_input.send_keys(tickets.gift_certificate_code)
+        sleep(1)
+        self.booking.gift_certificate_button.click()
+        wait(lambda: self.booking.modal_ok_button.is_displayed())
+        self.booking.modal_ok_button.click()
+
     def verify_payment_page(self, tickets):
         assert self.booking.checkout_activity.text == tickets.activity
         month = month_name[int(tickets.month)]
@@ -102,7 +109,8 @@ class CustomerActions:
             sleep(1)
 
     def verify_summary_details(self, tickets):
-        wait(lambda: self.booking.customer_information.is_displayed())
+        wait(lambda: self.booking.customer_information.is_displayed(), timeout_seconds=30,
+             waiting_for="Summary Detais is displayed")
         assert self.booking.customer_information.text == (tickets.first_name + ' ' + tickets.last_name), "Wrong customer!"
         assert self.booking.zip_information.text == tickets.zip_code, "Wrong zip code!"
         assert self.booking.phone_information.text == tickets.phone, "Wrong phone number!"

@@ -104,8 +104,10 @@ class CustomerActions:
     def refill_payment_info(self, tickets):
         self.booking.enter_cc_info(tickets.card_number, tickets.card_date, tickets.card_cvc, tickets.card_zip)
         wait(lambda: self.booking.next_button_5.is_enabled())
-        while self.booking.next_button_5.text == 'Get Your Tickets!':
+        attempt = 0
+        while self.booking.next_button_5.text == 'Get Your Tickets!' and attempt < 10:
             self.booking.next_button_5.click()
+            attempt += 1
             sleep(1)
 
     def verify_summary_details(self, tickets):

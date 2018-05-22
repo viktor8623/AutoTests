@@ -65,9 +65,15 @@ class CustomerActions:
         self.booking.phone_input.send_keys(tickets.phone)
         self.booking.email_input.send_keys(tickets.email)
         self.booking.zip_input.send_keys(tickets.zip_code)
+        self.answer_questions()
         self.booking.empty_space_fourth_page.click()
+        self.booking.scroll_down()
         wait(lambda: self.booking.next_button_4.is_enabled())
         self.booking.next_button_4.click()
+
+    def skip_addons(self):
+        wait(lambda: self.booking.next_button_5.is_displayed())
+        self.booking.next_button_5.click()
 
     def redeem_gift_certificate(self, tickets):
         self.booking.gift_certificate_input.send_keys(tickets.gift_certificate_code)
@@ -77,6 +83,7 @@ class CustomerActions:
         self.booking.modal_ok_button.click()
 
     def verify_payment_page(self, tickets):
+        wait(lambda: len(self.booking.checkout_activity.text) > 0, timeout_seconds=15)
         assert self.booking.checkout_activity.text == tickets.activity
         month = month_name[int(tickets.month)]
         date = "%s %s, %s" % (month, tickets.day, tickets.year)
@@ -90,23 +97,23 @@ class CustomerActions:
 
     def submit_declined_card(self, tickets):
         self.booking.enter_cc_info(tickets.declined_card_number, tickets.card_date, tickets.card_cvc, tickets.card_zip)
-        wait(lambda: self.booking.next_button_5.is_enabled())
-        self.booking.next_button_5.click()
+        wait(lambda: self.booking.next_button_6.is_enabled())
+        self.booking.next_button_6.click()
         wait(lambda: len(self.booking.payment_notification.text) > 0, timeout_seconds=100)
         assert self.booking.payment_notification.text == "Credit card declined: please try again.",\
             "Wrong text of the final alert: '%s'" % self.booking.payment_notification.text
 
     def make_payment(self, tickets):
         self.booking.enter_cc_info(tickets.card_number, tickets.card_date, tickets.card_cvc, tickets.card_zip)
-        wait(lambda: self.booking.next_button_5.is_enabled())
-        self.booking.next_button_5.click()
+        wait(lambda: self.booking.next_button_6.is_enabled())
+        self.booking.next_button_6.click()
 
     def refill_payment_info(self, tickets):
         self.booking.enter_cc_info(tickets.card_number, tickets.card_date, tickets.card_cvc, tickets.card_zip)
-        wait(lambda: self.booking.next_button_5.is_enabled())
+        wait(lambda: self.booking.next_button_6.is_enabled())
         attempt = 0
-        while self.booking.next_button_5.text == 'Get Your Tickets!' and attempt < 10:
-            self.booking.next_button_5.click()
+        while self.booking.next_button_6.text == 'Get Your Tickets!' and attempt < 10:
+            self.booking.next_button_6.click()
             attempt += 1
             sleep(1)
 
@@ -123,3 +130,6 @@ class CustomerActions:
         assert self.booking.tax_information.text == ("$" + tickets.taxes), "Summary Details: Wrong tax!"
         assert self.booking.grand_total.text == ("$" + tickets.grand_total), "Summary Details: Wrong grand total!"
 
+    def answer_questions(self):
+        for input in self.booking.question_inputs:
+            input.send_keys('test')

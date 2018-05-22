@@ -63,8 +63,13 @@ class CustomerBookingPage(BasePage):
     phone_input = Find(by=By.XPATH, value="//input[@id='contactPhone']")
     email_input = Find(by=By.XPATH, value="//input[@id='contactEmail']")
     zip_input = Find(by=By.XPATH, value="//input[@id='contactZipCode']")
-    empty_space_fourth_page = Find(by=By.XPATH, value="//h4[text()='Step 4/5: Your Info']")
-    next_button_4 = Find(by=By.XPATH, value="//button[@id='contactinforbtn']")
+    empty_space_fourth_page = Find(by=By.XPATH, value="//h4[text()='Step 4: Your Info']")
+    question_inputs = Finds(by=By.XPATH, value="//textarea")
+    next_button_4 = Find(by=By.XPATH, value="//button[@id='contact-info-btn']")
+
+    # Step 5: Add-ons
+
+    next_button_5 = Find(by=By.XPATH, value="//button[@id='addon-btn']")
 
     # Final Step: Checkout
 
@@ -79,7 +84,7 @@ class CustomerBookingPage(BasePage):
     card_cvc_input = Find(by=By.XPATH, value="//input[@name='cvc']")
     card_zip_input = Find(by=By.XPATH, value="//input[@name='postal']")
     payment_notification = Find(by=By.XPATH, value="//span[@id='CcErrorMsg']")
-    next_button_5 = Find(by=By.XPATH, value="//button[@id='submit-button']")
+    next_button_6 = Find(by=By.XPATH, value="//button[@id='submit-button']")
 
     # Information on the page.
 
@@ -135,3 +140,6 @@ class CustomerBookingPage(BasePage):
         if card_zip is not None:
             self.card_zip_input.send_keys(card_zip)
         self._driver.switch_to.default_content()
+
+    def scroll_down(self):
+        self._driver.execute_script("$('html,body').animate({scrollTop: document.body.scrollHeight},\"fast\");")

@@ -68,19 +68,32 @@ class CustomerActions:
         self.answer_questions()
         self.booking.empty_space_fourth_page.click()
         self.booking.scroll_down()
-        wait(lambda: self.booking.next_button_4.is_enabled())
+        wait(lambda: self.booking.next_button_4.is_displayed() and self.booking.next_button_4.is_enabled())
         self.booking.next_button_4.click()
 
     def skip_addons(self):
-        wait(lambda: self.booking.next_button_5.is_displayed())
+        wait(lambda: self.booking.next_button_5.is_displayed() and self.booking.next_button_5.is_enabled())
+        # sleep(1)
         self.booking.next_button_5.click()
+
+    def apply_valid_promo_code(self, tickets):
+        wait(lambda: len(self.booking.tickets_cost.text) > 0, waiting_for="Final Step: Checkout page shows up.",
+             timeout_seconds=10)
+        self.booking.promo_code_input.send_keys(tickets.promo_code)
+        wait(lambda: self.booking.promo_code_button.is_enabled())
+        self.booking.promo_code_button.click()
+        wait(lambda: self.booking.discount_pop_up.is_displayed(), timeout_seconds=15,
+             waiting_for="discount notification.")
+        assert self.booking.discount_pop_up.text == "Your promo code (%s) was applied." % tickets.promo_code, \
+            "Wrong notification: %s" % self.booking.discount_pop_up.text
+        self.booking.discount_pop_up_ok_button.click()
 
     def redeem_gift_certificate(self, tickets):
         self.booking.gift_certificate_input.send_keys(tickets.gift_certificate_code)
         sleep(1)
         self.booking.gift_certificate_button.click()
-        wait(lambda: self.booking.modal_ok_button.is_displayed())
-        self.booking.modal_ok_button.click()
+        wait(lambda: self.booking.discount_pop_up_ok_button.is_displayed())
+        self.booking.discount_pop_up_ok_button.click()
 
     def verify_payment_page(self, tickets):
         wait(lambda: len(self.booking.checkout_activity.text) > 0, timeout_seconds=15)

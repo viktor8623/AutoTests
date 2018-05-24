@@ -59,7 +59,6 @@ class CertificatePage(BasePage):
     def enter_cc_info(self, card_number, card_date, card_cvc, card_zip):
         wait(lambda: self.stripe.is_enabled(), timeout_seconds=15)
         self._driver.switch_to.frame(self.stripe)
-        wait(lambda: self.card_number_input.is_enabled())
         self.card_number_input.clear()
         self.card_number_input.send_keys(card_number)
         self.card_date_input.send_keys(card_date)

@@ -72,9 +72,9 @@ class CustomerActions:
         self.booking.next_button_4.click()
 
     def skip_addons(self):
-        wait(lambda: self.booking.next_button_5.is_displayed() and self.booking.next_button_5.is_enabled())
-        # sleep(1)
-        self.booking.next_button_5.click()
+        if self.booking.addons_present():
+            wait(lambda: self.booking.next_button_5.is_displayed() and self.booking.next_button_5.is_enabled())
+            self.booking.next_button_5.click()
 
     def apply_valid_promo_code(self, tickets):
         wait(lambda: len(self.booking.tickets_cost.text) > 0, waiting_for="Final Step: Checkout page shows up.",
@@ -86,6 +86,16 @@ class CustomerActions:
              waiting_for="discount notification.")
         assert self.booking.discount_pop_up.text == "Your promo code (%s) was applied." % tickets.promo_code, \
             "Wrong notification: %s" % self.booking.discount_pop_up.text
+        self.booking.discount_pop_up_ok_button.click()
+
+    def apply_invalid_promo_code(self, tickets):
+        self.booking.promo_code_input.send_keys(tickets.promo_code)
+        wait(lambda: self.booking.promo_code_button.is_enabled())
+        self.booking.promo_code_button.click()
+        wait(lambda: self.booking.discount_pop_up.is_displayed(), timeout_seconds=15,
+             waiting_for="discount notification.")
+        assert self.booking.discount_pop_up.text == "The code is invalid", "Wrong notification: %s" \
+                                                                           % self.booking.discount_pop_up.text
         self.booking.discount_pop_up_ok_button.click()
 
     def redeem_gift_certificate(self, tickets):

@@ -69,6 +69,7 @@ class CustomerBookingPage(BasePage):
 
     # Step 5: Add-ons
 
+    addons_page = Find(by=By.XPATH, value="//div[@id='addons']")
     next_button_5 = Find(by=By.XPATH, value="//button[@id='addon-btn']")
 
     # Final Step: Checkout
@@ -144,3 +145,10 @@ class CustomerBookingPage(BasePage):
 
     def scroll_down(self):
         self._driver.execute_script("$('html,body').animate({scrollTop: document.body.scrollHeight},\"fast\");")
+
+    def addons_present(self):
+        style = self.addons_page.get_attribute("style")
+        if style == "display: none;":
+            return False
+        else:
+            return True

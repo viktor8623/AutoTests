@@ -46,6 +46,20 @@ def test_customer_booking_promo_codes(customer, tickets):
     customer.booking.verify_summary_details(tickets)
 
 
+@pytest.mark.parametrize("tickets", testdata_cus1[26:], ids=[repr(x) for x in testdata_cus1[26:]])
+def test_customer_booking_invalid_promo_codes(customer, tickets):
+    """Order tickets via customer facing with invalid promo codes."""
+    customer.booking.open_page(tickets)
+    customer.booking.select_tickets_buttons(tickets)
+    customer.booking.select_date(tickets)
+    customer.booking.select_time(tickets)
+    customer.booking.fill_info(tickets)
+    customer.booking.skip_addons()
+    customer.booking.verify_payment_page(tickets)
+    customer.booking.apply_invalid_promo_code(tickets)
+    customer.booking.verify_payment_page(tickets)
+
+
 @pytest.fixture
 def stop():
     """Override admin's finalizer."""

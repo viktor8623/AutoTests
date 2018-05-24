@@ -25,12 +25,24 @@ def test_admin_booking_declines(app, tickets):
     app.booking.submit_successful_booking()
 
 
-@pytest.mark.parametrize("tickets", testdata1[18:27], ids=[repr(x) for x in testdata1[18:27]])
+@pytest.mark.parametrize("tickets", testdata1[18:28], ids=[repr(x) for x in testdata1[18:28]])
 def test_admin_booking_promo_codes(app, tickets):
-    """Booking tickets via admin with promo codes."""
+    """Booking tickets via admin with valid promo codes."""
     app.booking.refresh_page()
     app.booking.select_event(tickets)
-    app.booking.apply_promo_code(tickets)
+    app.booking.apply_valid_promo_code(tickets)
+    app.booking.fill_out_customer_info(tickets)
+    app.booking.select_payment_method(tickets)
+    app.booking.verify_payment_table(tickets)
+    app.booking.submit_successful_booking()
+
+
+@pytest.mark.parametrize("tickets", testdata1[28:], ids=[repr(x) for x in testdata1[28:]])
+def test_admin_booking_invalid_promo_codes(app, tickets):
+    """Booking tickets via admin with invalid promo codes."""
+    app.booking.refresh_page()
+    app.booking.select_event(tickets)
+    app.booking.apply_invalid_promo_code(tickets)
     app.booking.fill_out_customer_info(tickets)
     app.booking.select_payment_method(tickets)
     app.booking.verify_payment_table(tickets)

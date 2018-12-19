@@ -1,4 +1,5 @@
 from app.application import Application
+from app.call_center import CallCenter
 from app.customer import Customer
 import pytest
 import json
@@ -19,16 +20,36 @@ def app(request):
         with open(config_file) as f:
             target = json.load(f)
     if fixture is None or not fixture.is_valid():
-        fixture = Application(browser=browser)
-    fixture.session.ensure_login(login=target['login'], password=target['password'])
+        fixture = Application(browser=browser, domain=target['domain'], credentials=target)
+    fixture.session.ensure_login(user="admin")
+    return fixture
+
+
+@pytest.fixture
+def call_center(request):
+    global fixture
+    global target
+    browser = request.config.getoption("--browser")
+    if target is None:
+        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), request.config.getoption("--target"))
+        with open(config_file) as f:
+            target = json.load(f)
+    if fixture is None or not fixture.is_valid():
+        fixture = CallCenter(browser=browser, domain=target['domain'], credentials=target)
+    fixture.session.ensure_login(user="call_center")
     return fixture
 
 
 @pytest.fixture(scope="module")
 def customer(request):
     global fixture
+    global target
     browser = request.config.getoption("--browser")
-    fixture = Customer(browser=browser)
+    if target is None:
+        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), request.config.getoption("--target"))
+        with open(config_file) as f:
+            target = json.load(f)
+    fixture = Customer(browser=browser, domain=target['domain'])
     yield fixture
     fixture.destroy()
 

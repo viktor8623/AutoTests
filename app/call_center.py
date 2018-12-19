@@ -1,21 +1,14 @@
 import webium.settings
 from selenium import webdriver
 
-from actions.activity_hub import ActivityHub
-from actions.addons import Addons
 from actions.admin_booking import AdminBooking
 from actions.calendar import Calendar
 from actions.certificate import CertificateActions
-from actions.customer_booking import CustomerActions
-from actions.customer_certificate import CustomerCertActions
-from actions.groupons import Groupons
-from actions.people_hub import PeopleHub
-from actions.rain_checks import RainChecks
 from actions.waiting import Waiting
 from app.session import SessionHelper
 
 
-class Application:
+class CallCenter:
 
     def __init__(self, browser, domain, credentials):
         if browser == "chrome":
@@ -31,17 +24,10 @@ class Application:
         self.driver.set_script_timeout(30)
         self.driver.set_page_load_timeout(60)
         webium.settings.wait_timeout = 15
-        self.session = SessionHelper(self, domain, credentials)
-        self.customer_booking = CustomerActions(self, domain=domain)
-        self.customer_certs = CustomerCertActions(self, domain=domain)
+        self.session = SessionHelper(self, domain=domain, credentials=credentials)
         self.booking = AdminBooking(self)
         self.certificate = CertificateActions(self)
-        self.activity_hub = ActivityHub(self)
-        self.people_hub = PeopleHub(self)
-        self.groupons = Groupons(self)
-        self.addons = Addons(self)
         self.calendar = Calendar(self)
-        self.rain_checks = RainChecks(self)
         self.waiting = Waiting(self)
 
     def destroy(self):

@@ -1,5 +1,3 @@
-from time import sleep
-
 from webium.wait import wait
 
 from pages.activity_hub_page import ActivityHubPage
@@ -20,10 +18,8 @@ class ActivityHub:
         self.navigate_to()
         self.activity_hub.add_activity_button.click()
         self.fill_out_form(activity)
-        self.activity_page.save_button.click()
 
     def fill_out_form(self, activity):
-        sleep(5)
         self.activity_page.activity_name.send_keys(activity.activity_name)
         if activity.activity_url is not None:
             self.activity_page.activity_url.send_keys(activity.activity_url)
@@ -54,10 +50,6 @@ class ActivityHub:
         self.activity_page.minimum_not_met_alert.send_keys(activity.minimum_not_met_alert)
         if activity.stop_no_sales is not None:
             self.activity_page.stop_no_sales.send_keys(activity.stop_no_sales)
-        if activity.stop_midnight_before is not None:
-            self.activity_page.stop_midnight_before.click()
-        if activity.first_sale_closes_event is not None:
-            self.activity_page.first_sale_closes_event.click()
         self.activity_page.first_ticket_type.send_keys(activity.first_ticket_type)
         self.activity_page.first_ticket_price.send_keys(activity.first_ticket_price)
         self.activity_page.what_included.send_keys(activity.what_included)
@@ -70,5 +62,14 @@ class ActivityHub:
         wait(lambda: self.navigation_bar.activity_hub.is_displayed())
         self.navigation_bar.activity_hub.click()
 
+    def find_activity_by_name(self, activity):
+        self.activity_hub.search_activity_field.send_keys(activity)
 
+    def to_edit_page(self, activity):
+        self.find_activity_by_name(activity)
+        self.activity_hub.activity_actions.click()
+        self.activity_hub.edit_activity.click()
 
+    def verify_trained_guides(self, name):
+        wait(lambda: len(self.activity_page.activity_name.get_attribute('value')) > 0)
+        assert name == self.activity_page.get_selected_value(self.activity_page.first_guide)

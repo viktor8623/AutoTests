@@ -1,8 +1,8 @@
 import pytest
-from data.certificates import testdata1, testdata2
+from data.orders import admin_certificates, admin_certificates_declines, get_ids
 
 
-@pytest.mark.parametrize("certificate", testdata1, ids=[repr(x) for x in testdata1])
+@pytest.mark.parametrize("certificate", admin_certificates, ids=get_ids)
 def test_purchasing_certificate(app, certificate):
     """Selling certificates via admin."""
     app.certificate.select_certificate(certificate)
@@ -10,7 +10,7 @@ def test_purchasing_certificate(app, certificate):
     app.certificate.verify_created_certificate(certificate)
 
 
-@pytest.mark.parametrize("certificate", testdata2, ids=[repr(x) for x in testdata2])
+@pytest.mark.parametrize("certificate", admin_certificates_declines, ids=get_ids)
 def test_purchasing_certificate_declines(app, certificate):
     """Selling certificates via admin."""
     app.certificate.select_certificate(certificate)
